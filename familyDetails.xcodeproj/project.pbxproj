@@ -14,6 +14,7 @@
 		0301031D23A95B7F00F1044F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0301031C23A95B7F00F1044F /* Assets.xcassets */; };
 		0301032023A95B7F00F1044F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0301031F23A95B7F00F1044F /* Preview Assets.xcassets */; };
 		0301032323A95B7F00F1044F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0301032123A95B7F00F1044F /* LaunchScreen.storyboard */; };
+		0301032B23A95BD400F1044F /* MemberDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0301032A23A95BD400F1044F /* MemberDetails.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		0301031F23A95B7F00F1044F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		0301032223A95B7F00F1044F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0301032423A95B7F00F1044F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0301032A23A95BD400F1044F /* MemberDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberDetails.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,7 @@
 				0301032423A95B7F00F1044F /* Info.plist */,
 				0301031723A95B7C00F1044F /* familyDetails.xcdatamodeld */,
 				0301031E23A95B7F00F1044F /* Preview Content */,
+				0301032A23A95BD400F1044F /* MemberDetails.swift */,
 			);
 			path = familyDetails;
 			sourceTree = "<group>";
@@ -151,6 +154,7 @@
 			files = (
 				0301031423A95B7C00F1044F /* AppDelegate.swift in Sources */,
 				0301031623A95B7C00F1044F /* SceneDelegate.swift in Sources */,
+				0301032B23A95BD400F1044F /* MemberDetails.swift in Sources */,
 				0301031B23A95B7C00F1044F /* ContentView.swift in Sources */,
 				0301031923A95B7C00F1044F /* familyDetails.xcdatamodeld in Sources */,
 			);

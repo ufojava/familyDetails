@@ -17,11 +17,14 @@ struct ContentView: View {
     @State private var age = ""
     @State private var gender = ""
     @State private var nationality = ""
-    @State private var picFileName = "" //Ensure this is set to lowercase
+    @State private var imageFileName = "" //Ensure this is set to lowercase
     
     @State private var famMembers = ["Ufuoma","Bethany","Victoria"]
     
     @State private var imageName = ""
+    
+  let genderSelectArray = ["Male", "Female","Non Gender"]
+    @State private var selectedGender = "Male"
     
     
     func processFamDetail() {
@@ -51,20 +54,25 @@ struct ContentView: View {
 
     func procImage(inName: String) {
         
-        if inName == "Ufuoma" {
+  
+        
+        let imageConvertToLowercase = inName.lowercased()
+
+        if getMember.firstName.lowercased() == imageConvertToLowercase {
             
-            imageName = "ufuoma"
-                
-        } else if inName == "Bethany" {
-           imageName = "bethany"
+            if (UIImage(named: imageConvertToLowercase) != nil) {
             
+            imageName = imageConvertToLowercase
             
-        } else if inName == "Victoria" {
+        } else {
             
-            imageName = "victoria"
-            
+            imageName = "blank"
+        }
+        
         }
     }
+    
+    
     
     
     
@@ -73,6 +81,7 @@ struct ContentView: View {
         
         NavigationView {
         
+            
         
         //ZStack to get the background in
             ZStack {
@@ -85,29 +94,44 @@ struct ContentView: View {
             
                 VStack {
                 
+                   
+                    Form {
                 
-                
-                    Section { //Section Data Input
+                        Section { //Section Data Input
             
-                        TextField("Enter your firstname",text: $firstName)
-                        TextField("Enter your lastname",text: $lastName)
-                        TextField("Enter your age",text: $age)
-                        TextField("Enter your gender",text: $gender)
-                        TextField("Enter you nationality",text: $nationality)
-                        
-                        
+                            TextField("Enter your firstname",text: $firstName)
+                            TextField("Enter your lastname",text: $lastName)
+                            TextField("Enter your age",text: $age)
+                            TextField("Enter you nationality",text: $nationality)
+            
+                            //Picker for Gender
+                            Picker("Gender", selection: $selectedGender) {
+                            
+                            
+                                ForEach(genderSelectArray,id: \.self) {option in
+                                    Text(option)
+                                
+                                }
+                            }.pickerStyle(SegmentedPickerStyle())
                     
                     
-                    }//End to Data Input
+            
+                    }//End of Form
+                    
+                       
+                    
+                    
+                }//End to Data Input
                 .font(.system(size: 14))
                 .background(Color.white)
                 .cornerRadius(6)
                       
                 .autocapitalization(.words)
                    
-                .padding(.horizontal, 120)
+                .padding(.horizontal, 125)
     
-                    Spacer().frame(height:  40)
+                    
+                
                 
                 Button(action: {
                 
@@ -124,10 +148,10 @@ struct ContentView: View {
                 }) {
                     
                     
-                    Text("Click Here to update")
+                    Text("Display Details")
                     .padding()
                         .frame(width:   200, height: 30)
-                        .background(Color.blue)
+                        .background(Color.gray)
                         .foregroundColor(.white)
                         .cornerRadius(6)
                 }
@@ -143,10 +167,10 @@ struct ContentView: View {
                             .fill(Color.white)
                           
                              .cornerRadius(10)
-                            .padding(.horizontal,130)
-                            .padding(.vertical, 70)
+                            .padding(.horizontal,127)
+                            .padding(.vertical, 1)
                             
-                          
+                        
                 
                             List {
                     
@@ -154,17 +178,19 @@ struct ContentView: View {
                                     Text("Firstname: \(getMember.firstName)")
                                     Text("Lastname: \(getMember.lastName)")
                                     Text("Age: \(getMember.age)")
-                                    Text("Gender: \(getMember.gender)")
+                                    Text("Gender: \(self.selectedGender)")
                                     Text("Nationality: \(getMember.nationality)")
+                                
+                                
                                 Image(imageName)
                                     .resizable()
-                                    .frame(width: 50, height: 70)
+                                    .frame(width: 40, height: 60)
                                     .scaledToFill()
                     
                 
                             }.font(.system(size: 14))
                                 .padding(.horizontal, 155)
-                                 .padding(.vertical, 90)
+                                 .padding(.vertical, 20)
         
                 }//End of ZStack
                    

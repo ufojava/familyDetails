@@ -34,16 +34,27 @@ struct ContentView: View {
                 VStack {
                     Spacer().frame(height:100)
                     
+                   
+                    
                     Text("THE FAMILY")
-                    .font(.headline)
+                        .font(.headline)
+                        .foregroundColor(.blue)
+                    
+                    //Draw line
+                   Rectangle()
+                       .frame(width:400,height: 2)
                     
                     //Family Photo
                     Image("theFamilyArtCol")
                         .resizable()
                         .frame(width: 300, height: 200)
                         .scaledToFit()
-                        .border(Color.gray)
+                        .border(Color.gray, width: 3)
                     .shadow(radius: 6)
+                    
+                    //Draw line
+                    Rectangle()
+                        .frame(width:400,height: 2)
                     
                     
             
@@ -56,28 +67,29 @@ struct ContentView: View {
                
                     
                         if showMenuItem1 {
-                        MenuItem(icon: "tray.and.arrow.down")
-                            .foregroundColor(Color.green)
+                            MenuItem(icon: "tray.and.arrow.down")
+                                .foregroundColor(Color.green)
                             
                         }
                         
-                      
-                        
                    
                     
-                    if showMenuItem2 {
-                        MenuItem(icon: "book")
-                            .foregroundColor(Color.blue)
-                    }
+                        if showMenuItem2 {
+                            MenuItem(icon: "book")
+                                .foregroundColor(Color.blue)
+                        }
                     
-                    if showMenuItem3 {
-                        MenuItem(icon: "trash")
-                            .foregroundColor(Color.black)
-                    }
+                    
+                    
+                        if showMenuItem3 {
+                            MenuItem(icon: "trash")
+                                .foregroundColor(Color.black)
+                        }
                     
                     
                     
                     Text("Menu")
+                        .foregroundColor(.blue)
                     //Main Button
                     Button(action: {
                         

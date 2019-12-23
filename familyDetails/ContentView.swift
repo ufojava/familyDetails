@@ -20,6 +20,8 @@ struct ContentView: View {
     var body: some View {
         
         NavigationView {
+            
+            
         
             
                 //Set background for menu
@@ -67,18 +69,37 @@ struct ContentView: View {
                
                     
                         if showMenuItem1 {
-                            MenuItem(icon: "tray.and.arrow.down")
-                                .foregroundColor(Color.green)
                             
-                        }
+                            Button(action: {}) {
+                                
+                                NavigationLink(destination: dataEntryForm()) {
+                                
+                                MenuItem(icon: "tray.and.arrow.down")
+                                .foregroundColor(Color.green)
+                                    
+                                }
+                            }//Button End
+                            
+                            
+                            
+                            
+                        }//ShowItem1 End
                         
                    
                     
                         if showMenuItem2 {
-                            MenuItem(icon: "book")
+                            
+                            Button(action: {}) {
+                                
+                                NavigationLink(destination: listFamilyDetails()) {
+                                
+                                MenuItem(icon: "book")
                                 .foregroundColor(Color.blue)
+                                
+                                }
                         }
                     
+                    }//ShowItem2 End
                     
                     
                         if showMenuItem3 {
@@ -116,7 +137,7 @@ struct ContentView: View {
                 }
                                 
                     
-                    .navigationBarTitle(Text("Home 🏚"))
+                .navigationBarTitle(Text("Home 🏚"))
                 }
         
             
@@ -136,7 +157,7 @@ struct ContentView_Previews: PreviewProvider {
         
         //Animation
         withAnimation {
-            self.showMenuItem2.toggle()
+            self.showMenuItem3.toggle()
             
         }
         
@@ -144,7 +165,7 @@ struct ContentView_Previews: PreviewProvider {
             
             withAnimation {
                 
-                self.showMenuItem1.toggle()
+                self.showMenuItem2.toggle()
             }
             
         }
@@ -153,12 +174,14 @@ struct ContentView_Previews: PreviewProvider {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             
             withAnimation {
-                self.showMenuItem3.toggle()
+                self.showMenuItem1.toggle()
             }
         }
-    }
+    }//End showMenu
     
-//Menu Item
+    
+    
+//Menu Items
     struct MenuItem: View {
         
         var icon: String
@@ -178,8 +201,13 @@ struct ContentView_Previews: PreviewProvider {
     }
     
     
-
+//Data Input struct
 struct dataEntryForm: View {
+    
+//Property to interact with CoreData
+    @Environment(\.managedObjectContext) var managedObejectContext
+    @FetchRequest(entity: Family.entity(), sortDescriptors: []) var family: FetchedResults<Family>
+    
     
     @ObservedObject var getMember = Member()
        
@@ -193,7 +221,7 @@ struct dataEntryForm: View {
        
        @State private var imageName = ""
        
-     let genderSelectArray = ["Male", "Female","Non Gender"]
+     let genderSelectArray = ["Male", "Female","Neutral"]
        @State private var selectedGender = "Male"
        
        
@@ -247,9 +275,8 @@ struct dataEntryForm: View {
     var body: some View {
         
         
-        NavigationView {
-            
-                
+        
+            NavigationView {
             
             //ZStack to get the background in
                 ZStack {
@@ -262,8 +289,6 @@ struct dataEntryForm: View {
                 
                     VStack {
                     
-                       
-                        Form {
                     
                             Section { //Section Data Input
                 
@@ -283,9 +308,6 @@ struct dataEntryForm: View {
                                 }.pickerStyle(SegmentedPickerStyle())
                         
                         
-                
-                        }//End of Form
-                        
                            
                         
                         
@@ -301,29 +323,44 @@ struct dataEntryForm: View {
                         
                     
                     
-                    Button(action: {
+                    Button("Save Details") {
                     
                         self.processFamDetail()
                         self.procImage(inName: self.getMember.firstName)
                         
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        //Save details into Family Entity in CoreData
+                        let member = Family(context: self.managedObejectContext)
+                            member.firstName = self.getMember.firstName
+                            member.lastName = self.getMember.lastName
+                            member.age = String(self.getMember.age)
+                            member.gender = self.selectedGender
+                            member.nationality = self.getMember.nationality
+                            member.imageName = self.imageName
+                        
+                        //Save record to CoreData
+                        try? self.managedObejectContext.save()
+                        
+                        
+                        //Reset for
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                             
                             self.restFeilds()
                             
                         }
                         
                         
-                    }) {
+                    }
                         
-                        
-                        Text("Display Details")
+                    
                         .padding()
                             .frame(width:   200, height: 30)
                             .background(Color.gray)
                             .foregroundColor(.white)
                             .cornerRadius(6)
-                    }
+                    //}
                         Spacer().frame(height:  10)
+                        
+                        
                         
                         VStack {
                     
@@ -368,16 +405,14 @@ struct dataEntryForm: View {
                             
                         } //End of second VStack
                        
-                    
                 
-                        
-                        
-                        
-            
                     
-                .navigationBarTitle(Text("Family Member"))
+                            .navigationBarTitle(Text("Family Member"))
+                        
+                    
                 
                 }.padding()
+        
             
                 }//End of ZStack
                 
@@ -387,5 +422,36 @@ struct dataEntryForm: View {
         
     }
     
+}
+
+
+struct listFamilyDetails: View {
+    
+    //For interaction with CoreData
+    @Environment(\.managedObjectContext) var managedObjectContext
+    @FetchRequest(entity: Family.entity(), sortDescriptors: []) var family: FetchedResults<Family>
+    
+    
+    
+    var body: some View {
+        
+        NavigationView {
+        
+            //List CoreData Family Entity
+            List {
+            
+                ForEach(family, id: \.self) { member in
+                
+                    Text("\(member.firstName) - \(member.lastName), \(member.age), \(member.gender), \(member.nationality)")
+            
+            
+                
+                }//End of ForEach
+            
+            
+            }//End of List
+            
+        }
+    }
 }
 

@@ -103,9 +103,19 @@ struct ContentView: View {
                     
                     
                         if showMenuItem3 {
-                            MenuItem(icon: "trash")
+                            
+                            //Button
+                            Button(action: {}) {
+                                
+                                NavigationLink(destination: deleteFamilyDetails()) {
+                                
+                                MenuItem(icon: "trash")
                                 .foregroundColor(Color.black)
-                        }
+                                
+                                }
+                            }
+                            
+                        }//ShowItem3 End
                     
                     
                     
@@ -323,7 +333,7 @@ struct dataEntryForm: View {
                         
                     
                     
-                    Button("Save Details") {
+                    Button("Save") {
                     
                         self.processFamDetail()
                         self.procImage(inName: self.getMember.firstName)
@@ -425,6 +435,7 @@ struct dataEntryForm: View {
 }
 
 
+//Struct to List Family Details
 struct listFamilyDetails: View {
     
     //For interaction with CoreData
@@ -442,16 +453,95 @@ struct listFamilyDetails: View {
             
                 ForEach(family, id: \.self) { member in
                 
-                    Text("\(member.firstName) - \(member.lastName), \(member.age), \(member.gender), \(member.nationality)")
-            
-            
+                    VStack(alignment: .leading) {
+                        
+                        HStack {//Names
+                            
+                            Text("Firstname: \(member.firstName) - Lastname: \(member.lastName)")
+                        }
+                        
+                        HStack {//Other Details
+                            
+                            Text("Age: \(member.age), Gender: \(member.gender), Nationality: \(member.nationality)")
+                        }
+                        
+                        
+                    }
                 
                 }//End of ForEach
             
-            
+                
             }//End of List
+                .navigationBarTitle(Text("Report Details"),displayMode: .inline)
+        }//Navigation View End
+    }
+}
+
+
+//Struct to edit and Delete
+struct deleteFamilyDetails: View {
+    
+    //Set environment for access tdo CoreData
+    @Environment(\.managedObjectContext) var managedObjectContext
+    @FetchRequest(entity: Family.entity(), sortDescriptors: []) var family: FetchedResults<Family>
+    
+    
+    
+    
+    var body: some View {
+        
+        NavigationView {
             
-        }
+            List {
+        
+                    //Loop through CoreData
+                    ForEach(family, id: \.self) { member in
+                        
+                        VStack(alignment: .leading) {
+                            
+                            HStack {//Names
+                                Text("Firstname: \(member.firstName) - Lastname: \(member.lastName)")
+                            
+                            }
+        
+                            
+                            HStack {
+                                
+                                Text("Age: \(member.age), Gender: \(member.gender), Nationality: \(member.nationality)")
+                                
+                            }
+                            
+                        }//End to Vstack
+                        
+                        
+                        
+                    }//End to ForEach
+              
+                //Delete member in List
+                .onDelete(perform: deleteMember(indexSet:))
+                
+            }//End to List
+                
+                //Insert Edit Option
+                .navigationBarItems(trailing: EditButton())
+                
+                //Insert Title
+                .navigationBarTitle(Text("Details"),displayMode: .inline)
+            
+        }//End to NavigationView
+        
+    }
+    
+    //Function to delete record
+    
+    func deleteMember(indexSet: IndexSet) {
+        
+        let source = indexSet.first!
+        let familyMember = family[source]
+            managedObjectContext.delete(familyMember)
+        
+        //Update CoreData
+        try? managedObjectContext.save()
     }
 }
 

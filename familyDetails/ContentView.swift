@@ -14,6 +14,7 @@ struct ContentView: View {
     @State var showMenuItem1 = false
     @State var showMenuItem2 = false
     @State var showMenuItem3 = false
+    @State var showMenuItem4 = false
     
     
     
@@ -34,7 +35,7 @@ struct ContentView: View {
                 
                  
                 VStack {
-                    Spacer().frame(height:100)
+                    Spacer().frame(height:50)
                     
                    
                     
@@ -64,7 +65,7 @@ struct ContentView: View {
                     
                 
                 VStack {
-                    Spacer().frame(height:438)
+                    Spacer().frame(height:380)
                     
                
                     
@@ -118,9 +119,27 @@ struct ContentView: View {
                         }//ShowItem3 End
                     
                     
+                    if showMenuItem4 {
+                        
+                        Button(action: {}) {
+                            
+                            NavigationLink(destination: srchMember()) {
+                            
+                            MenuItem(icon: "magnifyingglass")
+                                .foregroundColor(Color.yellow)
+                                
+                                
+                            }
+                        }
+                    }
                     
-                    Text("Menu")
-                        .foregroundColor(.blue)
+                    
+                    
+                    Text("*** MENU ***")
+                        .foregroundColor(.black)
+                        .font(.body)
+                        .fontWeight(.bold)
+                    
                     //Main Button
                     Button(action: {
                         
@@ -165,13 +184,20 @@ struct ContentView_Previews: PreviewProvider {
 //Function to show Menu
     func showMenu() {
         
-        //Animation
         withAnimation {
-            self.showMenuItem3.toggle()
-            
+            self.showMenuItem4.toggle()
         }
         
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            //Animation
+            withAnimation {
+                self.showMenuItem3.toggle()
+            
+            }
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             
             withAnimation {
                 
@@ -181,7 +207,7 @@ struct ContentView_Previews: PreviewProvider {
         }
         
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             
             withAnimation {
                 self.showMenuItem1.toggle()
@@ -542,6 +568,70 @@ struct deleteFamilyDetails: View {
         
         //Update CoreData
         try? managedObjectContext.save()
+    }
+}
+
+struct srchMember: View {
+    
+  
+    @State private var lastName = ""
+    
+
+    
+
+    
+    //CoreData Environemt
+    @Environment(\.managedObjectContext) var managedObjectContext
+    @FetchRequest(entity: Family.entity(), sortDescriptors: [NSSortDescriptor(keyPath: \Family.lastName, ascending: true)]) var family: FetchedResults<Family>
+    
+    
+    
+    //Observable family details
+    @ObservedObject var getMember = Member()
+    
+    
+    
+    var body:   some View {
+        
+        
+        NavigationView {
+        
+            VStack(alignment: .leading) {
+            
+        
+                //Search parameter
+                TextField("Enter lastname",text: $lastName)
+                    .autocapitalization(.words)
+                    
+                
+            
+       
+                        ForEach(family, id: \.self) { member in
+                        
+                           
+                            VStack {
+                    
+                                if member.lastName == self.lastName {
+                                    
+                                    
+                                    Text("Name: \(member.firstName) - \(member.lastName)")
+                                        
+                                }
+                            }
+                        
+                           
+                                
+                        }//End ForEach
+                        
+                        Spacer()
+                    
+                    
+               
+             }//End of Main VStack
+                .padding()
+                .navigationBarTitle(Text("Search Results"),displayMode: .inline)
+        }//End to Navigation View
+           
     }
 }
 
